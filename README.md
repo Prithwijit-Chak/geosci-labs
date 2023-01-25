@@ -25,7 +25,7 @@ The notebooks can be run online through [Binder](#Binder), or [downloaded and ru
 
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Prithwijit-Chak/geosci-labs.git/geosci-lab_debug)
-1. Launch the binder by clicking on the badge above or going to: 
+1. Launch the binder by clicking on the badge above.
    This can sometimes take a couple minutes, so be patient...
 
 2. Select the notebook of interest from the contents
