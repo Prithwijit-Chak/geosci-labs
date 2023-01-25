@@ -11,7 +11,10 @@ import matplotlib.pylab as pylab
 from matplotlib.ticker import LogFormatter
 from matplotlib.path import Path
 import matplotlib.patches as patches
-from pymatsolver import Pardiso
+try:
+    from pymatsolver import Pardiso as Solver
+except ImportError:
+    from SimPEG import SolverLU as Solver
 
 from discretize import TensorMesh
 from SimPEG import maps, SolverLU, utils
@@ -91,10 +94,10 @@ def plate_fields(A, B, dx, dz, xc, zc, rotAng, sigplate, sighalf):
         survey = DC.survey.Survey([src])
 
         problem = DC.Simulation3DCellCentered(
-            mesh, survey=survey, sigmaMap=mapping, solver=Pardiso
+            mesh, survey=survey, sigmaMap=mapping, solver=Solver
         )
         problem_prim = DC.Simulation3DCellCentered(
-            mesh, survey=survey, sigmaMap=mapping, solver=Pardiso
+            mesh, survey=survey, sigmaMap=mapping, solver=Solver
         )
 
         primary_field = problem_prim.fields(mhalf)
@@ -293,7 +296,7 @@ def getSensitivity(survey, A, B, M, N, model):
 
     survey = DC.Survey([src])
     sim = DC.Simulation3DCellCentered(
-        mesh, sigmaMap=mapping, solver=Pardiso, survey=survey
+        mesh, sigmaMap=mapping, solver=Solver, survey=survey
     )
     J = sim.getJ(model)[0]
 

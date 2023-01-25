@@ -18,7 +18,10 @@ from matplotlib.path import Path
 import matplotlib.patches as patches
 
 from discretize import TensorMesh
-from pymatsolver import Pardiso
+try:
+    from pymatsolver import Pardiso as Solver
+except ImportError:
+    from SimPEG import SolverLU as Solver
 
 from SimPEG import maps, SolverLU, utils
 from SimPEG.electromagnetics.static import resistivity as DC
@@ -167,7 +170,7 @@ def DC2Dsurvey(flag="PolePole"):
 
     survey = DC.Survey(txList)
     simulation = DC.Simulation2DCellCentered(
-        mesh, survey=survey, sigmaMap=mapping, solver=Pardiso
+        mesh, survey=survey, sigmaMap=mapping, solver=Solver
     )
 
     sigblk, sighalf, siglayer = 2e-2, 2e-3, 1e-3

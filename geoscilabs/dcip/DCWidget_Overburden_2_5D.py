@@ -25,7 +25,10 @@ from SimPEG import maps, utils
 from SimPEG.utils import ExtractCoreMesh
 from SimPEG.electromagnetics.static import resistivity as DC
 
-from pymatsolver import Pardiso
+try:
+    from pymatsolver import Pardiso as Solver
+except ImportError:
+    from SimPEG import SolverLU as Solver
 
 from ..base import widgetify
 
@@ -165,13 +168,13 @@ def model_fields(A, B, mtrue, mhalf, mair, mover, whichprimary="air"):
             src = DC.sources.Dipole([], np.r_[A, surfaceA], np.r_[B, surfaceB])
         survey = DC.survey.Survey([src])
         problem = DC.Simulation2DCellCentered(
-            mesh, survey=survey, sigmaMap=mapping, solver=Pardiso
+            mesh, survey=survey, sigmaMap=mapping, solver=Solver
         )
         problem_prim = DC.Simulation2DCellCentered(
-            mesh, survey=survey, sigmaMap=mapping, solver=Pardiso
+            mesh, survey=survey, sigmaMap=mapping, solver=Solver
         )
         problem_air = DC.Simulation2DCellCentered(
-            mesh, survey=survey, sigmaMap=mapping, solver=Pardiso
+            mesh, survey=survey, sigmaMap=mapping, solver=Solver
         )
 
         if whichprimary == "air":
@@ -307,7 +310,7 @@ def getSensitivity(survey, A, B, M, N, model):
 
     Src = DC.Survey([src])
     sim = DC.Simulation2DCellCentered(
-        mesh, survey=Src, sigmaMap=mapping, solver=Pardiso
+        mesh, survey=Src, sigmaMap=mapping, solver=Solver
     )
     J = sim.getJ(model)[0]
 

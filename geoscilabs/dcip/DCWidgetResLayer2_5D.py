@@ -13,7 +13,10 @@ import matplotlib.patches as patches
 from SimPEG import maps, SolverLU, utils
 from SimPEG.utils import ExtractCoreMesh
 from SimPEG.electromagnetics.static import resistivity as DC
-from pymatsolver import Pardiso
+try:
+    from pymatsolver import Pardiso as Solver
+except ImportError:
+    from SimPEG import SolverLU as Solver
 
 from discretize import TensorMesh
 
@@ -99,11 +102,11 @@ def model_fields(A, B, zcLayer, dzLayer, xc, zc, r, sigLayer, sigTarget, sigHalf
             src = DC.sources.Dipole([], np.r_[A, 0.0], np.r_[B, 0.0])
         survey = DC.Survey([src])
         sim = DC.Simulation2DCellCentered(
-            mesh, survey=survey, sigmaMap=mapping, solver=Pardiso
+            mesh, survey=survey, sigmaMap=mapping, solver=Solver
         )
         total_field = sim.fields(mtrue)
         sim_prim = DC.Simulation2DCellCentered(
-            mesh, survey=survey, sigmaMap=mapping, solver=Pardiso
+            mesh, survey=survey, sigmaMap=mapping, solver=Solver
         )
         primary_field = sim_prim.fields(mhalf)
 
@@ -347,7 +350,7 @@ def getSensitivity(survey, A, B, M, N, model):
 
     Src = DC.Survey([src])
     sim = DC.Simulation2DCellCentered(
-        mesh, survey=Src, sigmaMap=mapping, solver=Pardiso
+        mesh, survey=Src, sigmaMap=mapping, solver=Solver
     )
     J = sim.getJ(model)
 

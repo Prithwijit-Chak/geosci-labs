@@ -10,7 +10,10 @@ from matplotlib import rcParams
 from discretize import TensorMesh
 
 from SimPEG import maps, utils
-from pymatsolver import Pardiso
+try:
+    from pymatsolver import Pardiso as Solver
+except ImportError:
+    from SimPEG import SolverLU as Solver
 
 from ..base import widgetify
 
@@ -172,7 +175,7 @@ def solve_2D_potentials(rho1, rho2, h, A, B):
         * utils.sdiag(1.0 / (mesh.dim * mesh.aveF2CC.T * (1.0 / sigma)))
         * mesh.cellGrad
     )
-    Ainv = Pardiso(A)
+    Ainv = Solver(A)
 
     V = Ainv * q
     return V

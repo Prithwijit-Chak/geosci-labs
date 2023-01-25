@@ -7,7 +7,10 @@ from matplotlib.ticker import LogFormatter
 from matplotlib.path import Path
 import matplotlib.patches as patches
 
-from pymatsolver import Pardiso
+try:
+    from pymatsolver import Pardiso as Solver
+except ImportError:
+    from SimPEG import SolverLU as Solver
 from discretize import TensorMesh
 
 from SimPEG import maps, utils
@@ -88,10 +91,10 @@ def cylinder_fields(A, B, r, sigcyl, sighalf, xc=0.0, zc=-20.0):
 
         # make two simulations for the seperate field objects
         sim_primary = DC.Simulation2DCellCentered(
-            mesh, survey=survey, sigmaMap=sigmaMap, solver=Pardiso
+            mesh, survey=survey, sigmaMap=sigmaMap, solver=Solver
         )
         sim_total = DC.Simulation2DCellCentered(
-            mesh, survey=survey, sigmaMap=sigmaMap, solver=Pardiso
+            mesh, survey=survey, sigmaMap=sigmaMap, solver=Solver
         )
 
         primary_field = sim_primary.fields(mhalf)
@@ -194,7 +197,7 @@ def getSensitivity(survey, A, B, M, N, model):
 
     Src = DC.Survey([src])
     sim = DC.Simulation2DCellCentered(
-        mesh, survey=Src, sigmaMap=sigmaMap, solver=Pardiso
+        mesh, survey=Src, sigmaMap=sigmaMap, solver=Solver
     )
     J = sim.getJ(model)[0]
 

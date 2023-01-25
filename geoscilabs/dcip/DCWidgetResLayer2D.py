@@ -11,7 +11,10 @@ from matplotlib.path import Path
 import matplotlib.patches as patches
 from scipy.constants import epsilon_0
 import copy
-from pymatsolver import Pardiso
+try:
+    from pymatsolver import Pardiso as Solver
+except ImportError:
+    from SimPEG import SolverLU as Solver
 
 from ipywidgets import interact, IntSlider, FloatSlider, FloatText, ToggleButtons
 
@@ -94,10 +97,10 @@ def model_fields(A, B, zcLayer, dzLayer, xc, zc, r, sigLayer, sigTarget, sigHalf
         survey = DC.Survey([src])
 
         problem = DC.Simulation3DCellCentered(
-            mesh, sigmaMap=sigmaMap, solver=Pardiso, survey=survey
+            mesh, sigmaMap=sigmaMap, solver=Solver, survey=survey
         )
         problem_prim = DC.Simulation3DCellCentered(
-            mesh, sigmaMap=sigmaMap, solver=Pardiso, survey=survey
+            mesh, sigmaMap=sigmaMap, solver=Solver, survey=survey
         )
 
         primary_field = problem_prim.fields(mhalf)
@@ -335,7 +338,7 @@ def getSensitivity(survey, A, B, M, N, model):
 
     survey = DC.survey.Survey([src])
     problem = DC.Simulation3DCellCentered(
-        mesh, survey=survey, sigmaMap=sigmaMap, solver=Pardiso
+        mesh, survey=survey, sigmaMap=sigmaMap, solver=Solver
     )
     J = problem.getJ(model)
 
