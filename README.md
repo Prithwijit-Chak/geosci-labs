@@ -1,6 +1,6 @@
 # GeoSci Labs
 
-
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Prithwijit-Chak/geosci-labs.git/geosci-lab_debug)
 [![pypi](https://img.shields.io/pypi/v/geoscilabs.svg)](https://pypi.python.org/pypi/geoscilabs)
 [![License](https://img.shields.io/github/license/geoscixyz/geosci-labs.svg)](https://github.com/geoscixyz/geosci-labs/blob/main/LICENSE)
 [![SimPEG](https://img.shields.io/badge/powered%20by-SimPEG-blue.svg)](http://simpeg.xyz)
@@ -24,7 +24,7 @@ The notebooks can be run online through [Binder](#Binder), or [downloaded and ru
 ### Binder
 
 
-
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Prithwijit-Chak/geosci-labs.git/geosci-lab_debug)
 1. Launch the binder by clicking on the badge above or going to: 
    This can sometimes take a couple minutes, so be patient...
 
